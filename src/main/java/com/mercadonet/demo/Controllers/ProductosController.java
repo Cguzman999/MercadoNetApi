@@ -6,9 +6,9 @@ package com.mercadonet.demo.Controllers;
 
 // Importaciones necesarias para manejar excepciones personalizadas, DTOs, modelos, seguridad y servicios
 import com.mercadonet.demo.Common.CustomException;
-import com.mercadonet.demo.Models.Clientes;
+import com.mercadonet.demo.Models.Productos;
 import com.mercadonet.demo.Security.JwtBalancer;
-import com.mercadonet.demo.Services.ClientesService;
+import com.mercadonet.demo.Services.ProductosService;
 import java.util.List;
 import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,30 +36,30 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("*")
 
 // Define la URL base del controlador
-@RequestMapping("/clientes/")
+@RequestMapping("/productos/")
 
-public class ClientesController {
-
-        // Inyección de dependencia del servicio que maneja la lógica de los clientes
+public class ProductosController {
+    
+     // Inyección de dependencia del servicio que maneja la lógica de los productos
      @Autowired
-     private ClientesService objservcli;
+     private ProductosService objservpro;
      
          // Inyección de dependencia para manejar y verificar los tokens JWT
      @Autowired
      private JwtBalancer objbal;
      
-     // Método GET para traer todos los clientes desde el endpoint /traerclientes
-     /*localhost:8081/clientes/traerclientes*/
-     @GetMapping("traerclientes")
-     public ResponseEntity<?> traerclientes(@RequestHeader (value="Authorization")String Token){
+     // Método GET para traer todos los productos desde el endpoint /traerproductos
+     /*localhost:8081/productos/traerproductos*/
+     @GetMapping("traerproductos")
+     public ResponseEntity<?> traerproductos(@RequestHeader (value="Authorization")String Token){
          try {
             // Verifica si el token es válido
              boolean response = objbal.Authjwt(Token);
              if(response){
-                // Si el token es válido, trae la lista de clientes desde el servicio
-                List<Clientes> clilist = objservcli.traerclientes();
-              // Devuelve la lista de clientes con un código de respuesta 200 (OK)
-              return ResponseEntity.ok(clilist);
+                // Si el token es válido, trae la lista de productos desde el servicio
+                List<Productos> prolist = objservpro.traerproductos();
+              // Devuelve la lista de productos con un código de respuesta 200 (OK)
+              return ResponseEntity.ok(prolist);
             }else{
               // Si el token no es válido, lanza una excepción personalizada
                  throw new CustomException(HttpStatus.UNAUTHORIZED.value(), "El token es invalido");
@@ -71,19 +71,19 @@ public class ClientesController {
          
     }
      
-     // Método GET para traer un cliente específico según la identificacion desde el endpoint /traercliente
-    //ejemplo del endpoint localhost:8080/clientes/traercliente?Identificacion=1111
-     @GetMapping("traercliente")
-     public ResponseEntity<?> traercliente(@RequestParam String Identificacion, @RequestHeader(value = "Authorization")String Token){
+     // Método GET para traer un producto específico según el nombre desde el endpoint /traerproducto
+    //ejemplo del endpoint localhost:8081/productos/traerproducto?Nombre=xxxx
+     @GetMapping("traerproducto")
+     public ResponseEntity<?> traerproducto(@RequestParam String Nombre, @RequestHeader(value = "Authorization")String Token){
         
           try {
              // Verifica si el token es válido
              boolean response = objbal.Authjwt(Token);
              if(response){
-                // Si el token es válido, trae el cliente correspondiente desde el servicio              
-                Clientes cli = objservcli.traercliente(Identificacion);
-              // Devuelve el cliente con un código de respuesta 200 (OK)
-              return ResponseEntity.ok(cli);
+                // Si el token es válido, trae el producto correspondiente desde el servicio              
+                Productos pro = objservpro.traerproducto(Nombre);
+              // Devuelve el producto con un código de respuesta 200 (OK)
+              return ResponseEntity.ok(pro);
             }else{
                  // Si el token no es válido, lanza una excepción personalizada
                  throw new CustomException(HttpStatus.UNAUTHORIZED.value(), "El token es invalido");
@@ -94,17 +94,17 @@ public class ClientesController {
          }
       }
      
-    // Método POST para crear un nuevo cliente desde el endpoint /crearcliente
-    //ejemplo del endpoint localhost:8080/clientes/crearcliente
-     @PostMapping("crearcliente")
-     public ResponseEntity<?> crearcliente(@RequestBody Clientes cli, @RequestHeader (value = "Authorization")String Token){
+    // Método POST para crear un nuevo cliente desde el endpoint /crearproducto
+    //ejemplo del endpoint localhost:8081/productos/crearproducto
+     @PostMapping("crearproducto")
+     public ResponseEntity<?> crearproducto(@RequestBody Productos pro, @RequestHeader (value = "Authorization")String Token){
           
          try {
              // Verifica si el token es válido
              boolean response = objbal.Authjwt(Token);
              if(response){
-                 // Si el token es válido, crea el cliente utilizando el servicio
-                 String resserv = objservcli.crearcliente(cli);
+                 // Si el token es válido, crea el producto utilizando el servicio
+                 String resserv = objservpro.crearproducto(pro);
                  // Devuelve el resultado de la creación con un código de respuesta 200 (OK)
                  return ResponseEntity.ok(resserv);
             }else{
@@ -118,16 +118,16 @@ public class ClientesController {
          }
 }
      
-     // Método PUT para actualizar un cliente desde el endpoint /actualizarcliente
-    //ejemplo del endpoint localhost:8080/clientes/actualizarcliente
-     @PutMapping("actualizarcliente")
-     public ResponseEntity<?> actualizarcliente(@RequestBody Clientes cli, @RequestHeader (value = "Authorization")String Token){
+     // Método PUT para actualizar un producto desde el endpoint /actualizarproducto
+    //ejemplo del endpoint localhost:8081/productos/actualizarproducto
+     @PutMapping("actualizarproducto")
+     public ResponseEntity<?> actualizarproducto(@RequestBody Productos pro, @RequestHeader (value = "Authorization")String Token){
          try {
               // Verifica si el token es válido
              boolean response = objbal.Authjwt(Token);
              if(response){
-                // Si el token es válido, actualiza el cliente utilizando el servicio
-                String actserv = objservcli.actualizarcliente(cli);
+                // Si el token es válido, actualiza el producto utilizando el servicio
+                String actserv = objservpro.actualizarproducto(pro);
                 // Devuelve el resultado de la actualizacion con un código de respuesta 200 (OK)
                 return ResponseEntity.ok(actserv);
            }else{
@@ -141,16 +141,16 @@ public class ClientesController {
     } 
 
      
-      // Método DELETE para eliminar un cliente según su identificacion desde el endpoint /eliminarcliente
-    //ejemplo del endpoint localhost:8080/clientes/eliminarcliente?Identificacion=1111
-      @DeleteMapping("eliminarcliente")
-    public ResponseEntity<?> eliminar(@RequestParam String Identificacion, @RequestHeader(value = "Authorization") String Token) {
+      // Método DELETE para eliminar un producto según su nombre desde el endpoint /eliminarproducto
+    //ejemplo del endpoint localhost:8081/productos/eliminarproducto?Nombre=xxxx
+      @DeleteMapping("eliminarproducto")
+    public ResponseEntity<?> eliminar(@RequestParam String Nombre, @RequestHeader(value = "Authorization") String Token) {
         try {
             // Verifica si el token es válido
             boolean response = objbal.Authjwt(Token);
             if (response) {
-                // Si el token es válido, elimina el cliente utilizando el servicio
-                String eliserv = objservcli.eliminarcliente(Identificacion);
+                // Si el token es válido, elimina el producto utilizando el servicio
+                String eliserv = objservpro.eliminarproducto(Nombre);
                 // Devuelve el resultado de la eliminación con un código de respuesta 200 (OK)
                 return ResponseEntity.ok(eliserv);
             } else {
@@ -162,6 +162,5 @@ public class ClientesController {
             return ResponseEntity.status(e.getstatus()).body(e.toString());
         }
     } 
-   
+    
 }
-

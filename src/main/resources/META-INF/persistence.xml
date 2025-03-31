@@ -4,6 +4,9 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.mercadonet.demo.Models.Clientes</class>
     <class>com.mercadonet.demo.Models.Usuarios</class>
+    <class>com.mercadonet.demo.Models.Productos</class>
+    <class>com.mercadonet.demo.Models.Despachos</class>
+    <class>com.mercadonet.demo.Models.Pedidos</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mercado_net"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
